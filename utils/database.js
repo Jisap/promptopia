@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 
-//Bza5XKXuj894N6sV
 
 let isConnected = false;
 
