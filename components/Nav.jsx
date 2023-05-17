@@ -12,14 +12,14 @@ const Nav = () => {
   const[providers, setProviders] = useState(null);
   const[toggleDropdown, setToggleDropdown] = useState(false); 
 
-  useEffect(() => {
+  useEffect(() => {                         // Obtenemos los providers de autenticación
     (async () => {
-      const res = await getProviders();
+      const res = await getProviders();     // getProviders llama al handler y obtiene los providers allí definidos
       setProviders(res);
-    })(); // Se invoca inmediatamente cuando se monta el componente sin esperar a que se llame en el boton
-  }, []); // El callback así no es una promesa sino una función.
+    })();                                   // Se invoca inmediatamente cuando se monta el componente sin esperar a que se llame en el boton
+  }, []);                                   // El callback así no es una promesa sino una función.
   
-  console.log(providers)
+  
   return (
     <nav className='flex-between w-full mb-16 pt-3'> 
       <Link href='/' className='flex gap-2 flex-center'> 
@@ -72,7 +72,7 @@ const Nav = () => {
             {providers && 
               Object.values(providers).map((provider)=> (
                 <button
-                  type='button'                       // signIn es un método de NextAuth-react que comunica con google y autentica nuestros datos
+                  type='button'                       // signIn es un método de NextAuth-react que comunica con google y autentica nuestros datos.
                   key={provider.name}                 // Google compara los datos del provider del handler contra los suyos y generá un token de acceso
                   onClick={() => signIn(provider.id)} // next-auth utilizará ese token de acceso para obtener la información del perfil del usuario autenticado.
                   className='black_btn'               // Esa información es el profile usado en el handler
