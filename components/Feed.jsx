@@ -29,7 +29,7 @@ const Feed = () => {
 
   useEffect(() => {
     const fetchPost = async () => {
-      const response = await fetch('/api/prompt');
+      const response = await fetch('/api/prompt');  // Fetch para obtener los prompts de bd
       const data = await response.json();
       setPost( data );
     }
@@ -38,7 +38,7 @@ const Feed = () => {
 
   return (
     <section className="feed">
-      <form className="relative w-full flex-center">
+      <form className="relative w-full flex-center">  
         <input 
           type="text" 
           placeholder="Search for a tag or username"
