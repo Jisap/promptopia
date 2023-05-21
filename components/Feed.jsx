@@ -21,20 +21,53 @@ const PromptCardList = ({ data, handleTagClick }) => {
 const Feed = () => {
 
   const [searchText, setSearchText] = useState("");
-  const [post, setPost] = useState([]);
+  const [searchTimeout, setSearchTimeout] = useState(null);
+  const [searchedResults, setSearchedResults] = useState([]);
 
-  const handleSearchChange = (e) => {
-    
-  };
+  const [allPosts, setAllPosts] = useState([]);
+
+  
 
   useEffect(() => {
     const fetchPost = async () => {
       const response = await fetch('/api/prompt');  // Fetch para obtener los prompts de bd
       const data = await response.json();
-      setPost( data );
+      setAllPosts( data );
     }
     fetchPost()
   },[]);
+
+  const filterPrompts = (searchtext) => {      // Toma un texto de búsqueda y filtra la matriz allPosts devolviendo solo los elementos que tienen una coincidencia  
+    const regex = new RegExp(searchtext, "i"); // 'i' flag for case-insensitive search
+    return allPosts.filter(
+      (item) =>
+        regex.test(item.creator.username) ||
+        regex.test(item.tag) ||
+        regex.test(item.prompt)
+    );
+  };
+
+  const handleSearchChange = (e) => {
+    clearTimeout(searchTimeout);
+    const newSearchText = e.target.value; 
+    setSearchText(newSearchText);                           // Estado del input de busqueda
+
+    // debounce method
+    setSearchTimeout(
+      setTimeout(() => {
+        const searchResult = filterPrompts(newSearchText);  // Rdo de la busqueda basado en filterPrompts
+        setSearchedResults(searchResult);                   // Estado del rdo de la busqueda 
+      }, 500)
+    );
+  };
+
+  const handleTagClick = (tagName) => {
+    setSearchText(tagName);
+
+    const searchResult = filterPrompts(tagName);
+    setSearchedResults(searchResult);
+  };
+
 
   return (
     <section className="feed">
@@ -49,10 +82,19 @@ const Feed = () => {
         />
       </form>  
 
-      <PromptCardList 
-        data={post}
-        handleTagClick={() => {}}
-      />
+
+      {searchText ? (
+        <PromptCardList 
+          data={searchedResults}
+          handleTagClick={handleTagClick}
+        />
+      ) : (
+        <PromptCardList 
+          data={allPosts}
+          handleTagClick={handleTagClick}
+        />
+      
+      )}
 
     </section>
   )
