@@ -17,7 +17,7 @@ const EditPrompt = () => {
 
     useEffect(() => {                                                // Cuando entremos a update-prompt
       const getPromptDetails = async () => {                         // obtendremos toda la data del prompt prexistente
-        const response = await fetch(`/api/prompt/${promptId}`);
+        const response = await fetch(`/api/prompt/${promptId}`);     // que se enviará al formulario   
         const data = await response.json();
 
         setPost({
@@ -57,11 +57,11 @@ const EditPrompt = () => {
 
     return (
         <Form 
-            type="Edit"
-            post={post}
-            setPost={setPost}
-            submitting={submitting}
-            handleSubmit={updatePrompt}
+            type="Edit"                         // Tipo de formulario: Edit
+            post={post}                         // Se le envía el prompt preexistente        
+            setPost={setPost}                   // Función para cambiar el estado de Post
+            submitting={submitting}             // Estado de la actualización
+            handleSubmit={updatePrompt}         // Función que actualiza el prompt 
         />
     )
 }
